@@ -188,6 +188,7 @@ public class AuthService {
     }
 
     private int generateOtp() {
-        return new Random().nextInt(100000, 1000000);
+        Random random = new Random();
+        return 100000 + random.nextInt(900000);
     }
 }
