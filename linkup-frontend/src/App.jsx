@@ -7,10 +7,8 @@ import Register from './components/Auth/Register';
 import VerifyOTP from './components/Auth/VerifyOTP';
 import Feed from './components/Feed/Feed';
 import Profile from './components/Profile/Profile';
-import UserProfile from './components/Profile/UserProfile';
 import EditProfile from './components/Profile/EditProfile';
 import CreatePost from './components/Post/CreatePost';
-import PostDetail from './components/Post/PostDetail';
 
 function App() {
   return (
@@ -52,15 +50,6 @@ function App() {
               }
             />
             <Route
-              path="/profile/:userId"
-              element={
-                <ProtectedRoute>
-                  <Navbar />
-                  <UserProfile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/profile/edit"
               element={
                 <ProtectedRoute>
@@ -75,15 +64,6 @@ function App() {
                 <ProtectedRoute>
                   <Navbar />
                   <CreatePost />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/post/:postId"
-              element={
-                <ProtectedRoute>
-                  <Navbar />
-                  <PostDetail />
                 </ProtectedRoute>
               }
             />

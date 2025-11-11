@@ -12,7 +12,7 @@ public class VerifyOtpRequest {
     private Integer userId;
     
     @NotNull(message = "OTP is required")
-    @Min(value = 1000, message = "Invalid OTP")
-    @Max(value = 9999, message = "Invalid OTP")
+    @Min(value = 100000, message = "Invalid OTP")
+    @Max(value = 999999, message = "Invalid OTP")
     private Integer otp;
 }
