@@ -66,7 +66,13 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         // Send OTP email
-        emailService.sendOtp(savedUser.getEmail(), otp, savedUser.getFirstname());
+        try {
+            emailService.sendOtp(savedUser.getEmail(), otp, savedUser.getFirstname());
+            log.info("OTP sent successfully to: {}", savedUser.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to send OTP email", e);
+            throw new RuntimeException("Failed to send OTP email. Please try again.");
+        }
 
         log.info("User registered successfully: {}", savedUser.getUsername());
 
@@ -86,25 +92,31 @@ public class AuthService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
-        if (user.getOtp() == null || !user.getOtp().equals(request.getOtp())) {
-            throw new BadRequestException("Invalid OTP");
+        // Check if OTP is null
+        if (user.getOtp() == null) {
+            throw new BadRequestException("No OTP found. Please request a new OTP.");
         }
 
-        // Mark user as verified
+        // Verify OTP
+        if (!user.getOtp().equals(request.getOtp())) {
+            throw new BadRequestException("Invalid OTP. Please check and try again.");
+        }
+
+        // Mark user as verified and clear OTP
         user.setVerified(true);
         user.setOtp(null);
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        log.info("User verified successfully: {}", user.getUsername());
+        log.info("User verified successfully: {}", savedUser.getUsername());
 
-        UserResponse userResponse = userMapper.toResponse(user, null, true);
+        UserResponse userResponse = userMapper.toResponse(savedUser, null, true);
         return AuthResponse.builder()
                 .user(userResponse)
                 .build();
     }
 
     /**
-     * Resend OTP
+     * Resend OTP - Fixed version
      */
     public void resendOtp(Integer userId) {
         log.info("Resending OTP for user ID: {}", userId);
@@ -112,13 +124,28 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
-        int otp = generateOtp();
-        user.setOtp(otp);
-        userRepository.save(user);
+        // Check if user is already verified
+        if (user.getVerified()) {
+            throw new BadRequestException("User is already verified");
+        }
 
-        emailService.sendOtp(user.getEmail(), otp, user.getFirstname());
+        // Generate NEW OTP
+        int newOtp = generateOtp();
 
-        log.info("OTP resent successfully to: {}", user.getEmail());
+        // IMPORTANT: Clear old OTP and set new one
+        user.setOtp(newOtp);
+
+        // Save to database FIRST
+        User savedUser = userRepository.save(user);
+
+        // Then send email with the new OTP
+        try {
+            emailService.sendOtp(savedUser.getEmail(), newOtp, savedUser.getFirstname());
+            log.info("New OTP generated and sent successfully to: {}", savedUser.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to send OTP email", e);
+            throw new RuntimeException("Failed to send OTP email. Please try again.");
+        }
     }
 
     /**
@@ -137,13 +164,18 @@ public class AuthService {
 
         // Check if verified
         if (!user.getVerified()) {
-            // Resend OTP
+            // Generate and send new OTP
             int otp = generateOtp();
             user.setOtp(otp);
             userRepository.save(user);
-            emailService.sendOtp(user.getEmail(), otp, user.getFirstname());
 
-            throw new BadRequestException("Email not verified. OTP sent to your email.");
+            try {
+                emailService.sendOtp(user.getEmail(), otp, user.getFirstname());
+            } catch (Exception e) {
+                log.error("Failed to send OTP", e);
+            }
+
+            throw new BadRequestException("Email not verified. A new OTP has been sent to your email.");
         }
 
         log.info("User logged in successfully: {}", user.getUsername());
@@ -151,7 +183,6 @@ public class AuthService {
         UserResponse userResponse = userMapper.toResponse(user, null, true);
         return AuthResponse.builder()
                 .user(userResponse)
-                // TODO: Add JWT token here when implementing JWT
                 .build();
     }
 
