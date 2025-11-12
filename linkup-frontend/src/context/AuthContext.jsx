@@ -18,6 +18,9 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data.data);
       }
     } catch (error) {
+      // Don't redirect here - just set user to null
+      // The ProtectedRoute component will handle redirects
+      console.log('Not authenticated');
       setUser(null);
     } finally {
       setLoading(false);
@@ -36,8 +39,12 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await authAPI.logout();
+    } catch (error) {
+      console.error('Logout error:', error);
     } finally {
       setUser(null);
+      // Redirect to login after logout
+      window.location.href = '/login';
     }
   };
 

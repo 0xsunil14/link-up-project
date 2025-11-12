@@ -14,9 +14,19 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only redirect to login if:
+    // 1. We get a 401 error
+    // 2. We're NOT already on the login/register/verify-otp pages
+    // 3. The request was NOT to check authentication (getProfile)
     if (error.response?.status === 401) {
-      // Unauthorized - redirect to login
-      window.location.href = '/login';
+      const currentPath = window.location.pathname;
+      const isAuthPage = ['/login', '/register', '/verify-otp'].includes(currentPath);
+      const isAuthCheckRequest = error.config?.url?.includes('/users/profile');
+      
+      // Only redirect if we're on a protected page and it's not the initial auth check
+      if (!isAuthPage && !isAuthCheckRequest) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
