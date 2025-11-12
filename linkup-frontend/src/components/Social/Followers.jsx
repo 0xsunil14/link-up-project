@@ -80,7 +80,7 @@ export default function Followers() {
                   {follower.imageUrl ? (
                     <img src={follower.imageUrl} alt={follower.username} className="w-12 h-12 rounded-full object-cover" />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
                       {follower.username[0].toUpperCase()}
                     </div>
                   )}

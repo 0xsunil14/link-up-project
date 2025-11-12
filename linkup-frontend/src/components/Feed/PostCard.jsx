@@ -25,21 +25,25 @@ export default function PostCard({ post, onLike }) {
     setShowComments(!showComments);
   };
 
+  
   const handleAddComment = async (e) => {
-    e.preventDefault();
-    if (!newComment.trim()) return;
+  e.preventDefault();
+  if (!newComment.trim()) return;
 
-    try {
-      const response = await commentAPI.addComment(post.id, { content: newComment });
-      if (response.data.success) {
-        setComments([...comments, response.data.data]);
-        setNewComment('');
-      }
-    } catch (err) {
-      console.error('Failed to add comment');
+  try {
+    const response = await commentAPI.addComment(post.id, { 
+      content: newComment,
+      postId: post.id  // Add postId explicitly
+    });
+    if (response.data.success) {
+      setComments([...comments, response.data.data]);
+      setNewComment('');
     }
-  };
-
+  } catch (err) {
+    console.error('Failed to add comment', err);
+    alert('Failed to add comment. Please try again.');
+  }
+};
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();

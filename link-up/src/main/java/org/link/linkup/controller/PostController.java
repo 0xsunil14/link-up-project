@@ -77,10 +77,10 @@ public class PostController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PostResponse>> updatePost(
-            @PathVariable Integer id,
+            @PathVariable Integer id,  // Changed from request body
             @Valid @RequestBody UpdatePostRequest request,
             User currentUser) {
-        request.setPostId(id);
+        request.setPostId(id);  // Set the ID from path
         PostResponse response = postService.updatePost(request, currentUser);
         return ResponseEntity.ok(ApiResponse.success("Post updated successfully", response));
     }

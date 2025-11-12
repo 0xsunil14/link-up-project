@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class UpdatePostRequest {
     
-    @NotNull(message = "Post ID is required")
+//    @NotNull(message = "Post ID is required")
     private Integer postId;
     
     @NotBlank(message = "Caption is required")

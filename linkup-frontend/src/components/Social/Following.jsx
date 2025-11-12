@@ -78,7 +78,7 @@ export default function Following() {
                   {user.imageUrl ? (
                     <img src={user.imageUrl} alt={user.username} className="w-12 h-12 rounded-full object-cover" />
                   ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold">
                       {user.username[0].toUpperCase()}
                     </div>
                   )}

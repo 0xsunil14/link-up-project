@@ -14,6 +14,8 @@ import Following from './components/Social/Following';
 import Suggestions from './components/Social/Suggestions';
 import EditPost from './components/Post/EditPost';
 import GetPrime from './components/Payment/GetPrime';
+import UserProfile from './components/Profile/UserProfile';
+
 
 function App() {
   return (
@@ -37,6 +39,7 @@ function App() {
             {/* NEW ROUTES */}
             <Route path="/followers" element={<ProtectedRoute><Navbar /><Followers /></ProtectedRoute>} />
             <Route path="/following" element={<ProtectedRoute><Navbar /><Following /></ProtectedRoute>} />
+            <Route path="/user/:userId" element={<ProtectedRoute><Navbar /><UserProfile /></ProtectedRoute>} />
             <Route path="/suggestions" element={<ProtectedRoute><Navbar /><Suggestions /></ProtectedRoute>} />
             <Route path="/prime" element={<ProtectedRoute><Navbar /><GetPrime /></ProtectedRoute>} />
 
