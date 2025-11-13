@@ -16,6 +16,7 @@ import Following from './components/Social/Following';
 import Suggestions from './components/Social/Suggestions';
 import GetPrime from './components/Payment/GetPrime';
 import UserProfile from './components/Profile/UserProfile';
+import { DeleteModal } from './components/Common/DeleteModal';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/post/create" element={<ProtectedRoute><Navbar /><CreatePost /></ProtectedRoute>} />
             <Route path="/post/edit/:postId" element={<ProtectedRoute><Navbar /><EditPost /></ProtectedRoute>} />
             <Route path="/post/:postId" element={<ProtectedRoute><Navbar /><PostDetail /></ProtectedRoute>} />
+            <Route path="/post/:postId" element={<ProtectedRoute><Navbar /><DeleteModal/></ProtectedRoute>} />
             
             <Route path="/followers" element={<ProtectedRoute><Navbar /><Followers /></ProtectedRoute>} />
             <Route path="/following" element={<ProtectedRoute><Navbar /><Following /></ProtectedRoute>} />

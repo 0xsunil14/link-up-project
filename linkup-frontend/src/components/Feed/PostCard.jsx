@@ -79,7 +79,7 @@ export default function PostCard({ post, onLike }) {
           {post.user.imageUrl ? (
             <img src={post.user.imageUrl} alt={post.user.username} className="w-12 h-12 rounded-full object-cover ring-2 ring-white group-hover:ring-indigo-100 transition-all" />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+            <div className="w-12 h-12 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
               {post.user.username[0].toUpperCase()}
             </div>
           )}
@@ -170,11 +170,11 @@ export default function PostCard({ post, onLike }) {
               <>
                 {comments.map(comment => (
                   <div key={comment.id} className="flex space-x-3 bg-gray-50 rounded-lg p-3">
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       {comment.user.imageUrl ? (
                         <img src={comment.user.imageUrl} alt={comment.user.username} className="w-8 h-8 rounded-full" />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
                           {comment.user.username[0].toUpperCase()}
                         </div>
                       )}

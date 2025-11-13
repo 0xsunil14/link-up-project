@@ -75,20 +75,20 @@ export default function Profile() {
                     {user.username[0].toUpperCase()}
                   </div>
                 )}
-                {user.prime && (
-                  <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  </div>
-                )}
               </div>
 
               {/* User Info */}
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                  {user.firstname} {user.lastname}
-                </h1>
+                <div className="flex items-center justify-center md:justify-start mb-1">
+                  <h1 className="text-3xl font-bold text-gray-900">
+                    {user.firstname} {user.lastname}
+                  </h1>
+                  {user.prime && (
+                    <svg className="w-6 h-6 ml-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
                 <p className="text-gray-600 mb-2">@{user.username}</p>
                 {user.bio && <p className="text-gray-700 mb-4">{user.bio}</p>}
 
@@ -192,13 +192,14 @@ export default function Profile() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                           </svg>
                         </button>
-                        <DeleteModal
-                          isOpen={deleteModal.isOpen}
-                          onClose={() => setDeleteModal({ isOpen: false, postId: null })}
-                          onConfirm={confirmDelete}
-                          title="Delete Post?"
-                          message="Are you sure you want to delete this post? This action cannot be undone."
-                        />
+                        <button
+                          onClick={() => handleDeletePost(post.id)}
+                          className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                          <svg className="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -207,6 +208,14 @@ export default function Profile() {
             </div>
           )}
         </div>
+
+        <DeleteModal
+          isOpen={deleteModal.isOpen}
+          onClose={() => setDeleteModal({ isOpen: false, postId: null })}
+          onConfirm={confirmDelete}
+          title="Delete Post?"
+          message="Are you sure you want to delete this post? This action cannot be undone."
+        />
       </div>
     
   );
