@@ -128,7 +128,7 @@ export default function PostDetail() {
                     className="w-14 h-14 rounded-full object-cover ring-2 ring-white group-hover:ring-indigo-100 transition-all" 
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-14 h-14 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white font-bold text-lg">
                     {post.user.username[0].toUpperCase()}
                   </div>
                 )}
@@ -231,7 +231,7 @@ export default function PostDetail() {
                 ) : (
                   comments.map(comment => (
                     <div key={comment.id} className="flex space-x-3 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                      <Link to={`/user/${comment.user.id}`} className="flex-shrink-0">
+                      <Link to={`/user/${comment.user.id}`} className="shrink-0">
                         {comment.user.imageUrl ? (
                           <img 
                             src={comment.user.imageUrl} 
@@ -239,7 +239,7 @@ export default function PostDetail() {
                             className="w-10 h-10 rounded-full object-cover" 
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
+                          <div className="w-10 h-10 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
                             {comment.user.username[0].toUpperCase()}
                           </div>
                         )}
