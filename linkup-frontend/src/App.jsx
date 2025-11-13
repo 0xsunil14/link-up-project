@@ -9,13 +9,13 @@ import Feed from './components/Feed/Feed';
 import Profile from './components/Profile/Profile';
 import EditProfile from './components/Profile/EditProfile';
 import CreatePost from './components/Post/CreatePost';
+import EditPost from './components/Post/EditPost';
+import PostDetail from './components/Post/PostDetail';
 import Followers from './components/Social/Followers';
 import Following from './components/Social/Following';
 import Suggestions from './components/Social/Suggestions';
-import EditPost from './components/Post/EditPost';
 import GetPrime from './components/Payment/GetPrime';
 import UserProfile from './components/Profile/UserProfile';
-
 
 function App() {
   return (
@@ -35,8 +35,8 @@ function App() {
             <Route path="/profile/edit" element={<ProtectedRoute><Navbar /><EditProfile /></ProtectedRoute>} />
             <Route path="/post/create" element={<ProtectedRoute><Navbar /><CreatePost /></ProtectedRoute>} />
             <Route path="/post/edit/:postId" element={<ProtectedRoute><Navbar /><EditPost /></ProtectedRoute>} />
+            <Route path="/post/:postId" element={<ProtectedRoute><Navbar /><PostDetail /></ProtectedRoute>} />
             
-            {/* NEW ROUTES */}
             <Route path="/followers" element={<ProtectedRoute><Navbar /><Followers /></ProtectedRoute>} />
             <Route path="/following" element={<ProtectedRoute><Navbar /><Following /></ProtectedRoute>} />
             <Route path="/user/:userId" element={<ProtectedRoute><Navbar /><UserProfile /></ProtectedRoute>} />

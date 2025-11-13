@@ -1,12 +1,17 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { commentAPI } from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PostCard({ post, onLike }) {
+  const { user: currentUser } = useAuth();
+  const navigate = useNavigate();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
   const [loadingComments, setLoadingComments] = useState(false);
+
+  const isOwnPost = currentUser?.id === post.user.id;
 
   const fetchComments = async () => {
     if (!showComments) {
@@ -25,25 +30,25 @@ export default function PostCard({ post, onLike }) {
     setShowComments(!showComments);
   };
 
-  
   const handleAddComment = async (e) => {
-  e.preventDefault();
-  if (!newComment.trim()) return;
+    e.preventDefault();
+    if (!newComment.trim()) return;
 
-  try {
-    const response = await commentAPI.addComment(post.id, { 
-      content: newComment,
-      postId: post.id  // Add postId explicitly
-    });
-    if (response.data.success) {
-      setComments([...comments, response.data.data]);
-      setNewComment('');
+    try {
+      const response = await commentAPI.addComment(post.id, { 
+        content: newComment,
+        postId: post.id
+      });
+      if (response.data.success) {
+        setComments([...comments, response.data.data]);
+        setNewComment('');
+      }
+    } catch (err) {
+      console.error('Failed to add comment', err);
+      alert('Failed to add comment. Please try again.');
     }
-  } catch (err) {
-    console.error('Failed to add comment', err);
-    alert('Failed to add comment. Please try again.');
-  }
-};
+  };
+
   const formatTime = (timestamp) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -55,11 +60,22 @@ export default function PostCard({ post, onLike }) {
     return `${Math.floor(diff / 86400)}d ago`;
   };
 
+  const handleProfileClick = () => {
+    if (isOwnPost) {
+      navigate('/profile');
+    } else {
+      navigate(`/user/${post.user.id}`);
+    }
+  };
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
       {/* Post Header */}
       <div className="p-4 flex items-center justify-between">
-        <Link to={`/profile/${post.user.id}`} className="flex items-center space-x-3 group">
+        <div 
+          onClick={handleProfileClick}
+          className="flex items-center space-x-3 group cursor-pointer"
+        >
           <div className="relative">
             {post.user.imageUrl ? (
               <img src={post.user.imageUrl} alt={post.user.username} className="w-12 h-12 rounded-full object-cover ring-2 ring-white group-hover:ring-indigo-100 transition-all" />
@@ -82,19 +98,27 @@ export default function PostCard({ post, onLike }) {
             </p>
             <p className="text-sm text-gray-500">@{post.user.username} · {formatTime(post.createdAt)}</p>
           </div>
-        </Link>
+        </div>
       </div>
 
-      {/* Post Image */}
+      {/* Post Image - Clickable to open full view */}
       {post.imageUrl && (
-        <div className="relative bg-gray-100">
+        <div 
+          className="relative bg-gray-100 cursor-pointer hover:opacity-95 transition-opacity"
+          onClick={() => navigate(`/post/${post.id}`)}
+        >
           <img src={post.imageUrl} alt="Post" className="w-full h-auto object-cover" />
         </div>
       )}
 
       {/* Post Content */}
       <div className="p-4">
-        <p className="text-gray-800 mb-4 leading-relaxed">{post.caption}</p>
+        <p 
+          className="text-gray-800 mb-4 leading-relaxed cursor-pointer hover:text-gray-900"
+          onClick={() => navigate(`/post/${post.id}`)}
+        >
+          {post.caption}
+        </p>
 
         {/* Actions */}
         <div className="flex items-center justify-between py-2 border-t border-gray-100">
@@ -126,9 +150,13 @@ export default function PostCard({ post, onLike }) {
             </button>
           </div>
 
-          <button className="text-gray-600 hover:text-indigo-600 transition-colors">
+          <button 
+            className="text-gray-600 hover:text-indigo-600 transition-colors"
+            onClick={() => navigate(`/post/${post.id}`)}
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
           </button>
         </div>

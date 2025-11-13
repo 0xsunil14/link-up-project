@@ -1,18 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { userAPI, postAPI } from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 export default function UserProfile() {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const { user: currentUser } = useAuth();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const isOwnProfile = currentUser?.id === parseInt(userId);
+
   useEffect(() => {
+    // If viewing own profile, redirect to /profile
+    if (isOwnProfile) {
+      navigate('/profile', { replace: true });
+      return;
+    }
     fetchUserData();
-  }, [userId]);
+  }, [userId, isOwnProfile]);
 
   const fetchUserData = async () => {
     try {
@@ -151,7 +160,11 @@ export default function UserProfile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {posts.map(post => (
-                <div key={post.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
+                <div 
+                  key={post.id} 
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all cursor-pointer"
+                  onClick={() => navigate(`/post/${post.id}`)}
+                >
                   {post.imageUrl && (
                     <div className="aspect-square overflow-hidden">
                       <img src={post.imageUrl} alt="Post" className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />

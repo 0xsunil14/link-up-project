@@ -139,7 +139,6 @@ export default function Profile() {
         </div>
 
         {/* Posts Grid */}
-        <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Posts</h2>
           {posts.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
@@ -209,6 +208,6 @@ export default function Profile() {
           )}
         </div>
       </div>
-    </div>
+    
   );
 }
