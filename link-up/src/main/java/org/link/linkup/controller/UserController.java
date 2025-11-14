@@ -64,15 +64,43 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success("User unfollowed successfully", null));
     }
 
+    // ========== YOUR OWN FOLLOWERS/FOLLOWING ==========
+
     @GetMapping("/followers")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> getFollowers(User currentUser) {
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getMyFollowers(User currentUser) {
         List<UserResponse> followers = userService.getFollowers(currentUser);
         return ResponseEntity.ok(ApiResponse.success("Followers fetched successfully", followers));
     }
 
     @GetMapping("/following")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> getFollowing(User currentUser) {
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getMyFollowing(User currentUser) {
         List<UserResponse> following = userService.getFollowing(currentUser);
         return ResponseEntity.ok(ApiResponse.success("Following list fetched successfully", following));
+    }
+
+    // ========== NEW: ANY USER'S FOLLOWERS/FOLLOWING ==========
+
+    /**
+     * Get followers of a specific user
+     * GET /api/users/{userId}/followers
+     */
+    @GetMapping("/{userId}/followers")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getUserFollowers(
+            @PathVariable Integer userId,
+            User currentUser) {
+        List<UserResponse> followers = userService.getUserFollowers(userId, currentUser);
+        return ResponseEntity.ok(ApiResponse.success("User followers fetched successfully", followers));
+    }
+
+    /**
+     * Get following list of a specific user
+     * GET /api/users/{userId}/following
+     */
+    @GetMapping("/{userId}/following")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getUserFollowing(
+            @PathVariable Integer userId,
+            User currentUser) {
+        List<UserResponse> following = userService.getUserFollowing(userId, currentUser);
+        return ResponseEntity.ok(ApiResponse.success("User following list fetched successfully", following));
     }
 }

@@ -19,7 +19,7 @@ public class CloudinaryHelper {
 		Cloudinary cloudinary = new Cloudinary(url);
 		Map map = null;
 		try {
-			map = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "jspgram"));
+			map = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "linkup"));
 		} catch (IOException e) {
 		}
 		return (String) map.get("url");

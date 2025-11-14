@@ -146,8 +146,10 @@ public class UserService {
         log.info("User {} unfollowed {}", currentUser.getUsername(), targetUser.getUsername());
     }
 
+    // ========== YOUR OWN FOLLOWERS/FOLLOWING ==========
+
     /**
-     * Get followers list
+     * Get followers list of current user
      */
     @Transactional(readOnly = true)
     public List<UserResponse> getFollowers(User currentUser) {
@@ -162,7 +164,7 @@ public class UserService {
     }
 
     /**
-     * Get following list
+     * Get following list of current user
      */
     @Transactional(readOnly = true)
     public List<UserResponse> getFollowing(User currentUser) {
@@ -172,6 +174,38 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         return user.getFollowing().stream()
+                .map(following -> userMapper.toResponse(following, currentUser, false))
+                .collect(Collectors.toList());
+    }
+
+    // ========== NEW: ANY USER'S FOLLOWERS/FOLLOWING ==========
+
+    /**
+     * Get followers of a specific user (for viewing other profiles)
+     */
+    @Transactional(readOnly = true)
+    public List<UserResponse> getUserFollowers(Integer userId, User currentUser) {
+        log.info("Fetching followers for user ID: {} (viewed by {})", userId, currentUser.getUsername());
+
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return targetUser.getFollowers().stream()
+                .map(follower -> userMapper.toResponse(follower, currentUser, false))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get following list of a specific user (for viewing other profiles)
+     */
+    @Transactional(readOnly = true)
+    public List<UserResponse> getUserFollowing(Integer userId, User currentUser) {
+        log.info("Fetching following for user ID: {} (viewed by {})", userId, currentUser.getUsername());
+
+        User targetUser = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        return targetUser.getFollowing().stream()
                 .map(following -> userMapper.toResponse(following, currentUser, false))
                 .collect(Collectors.toList());
     }
