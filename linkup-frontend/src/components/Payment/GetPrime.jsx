@@ -40,7 +40,7 @@ const handleGetPrime = async () => {
           }
         },
         theme: {
-          color: "#4F46E5"
+          color: "#4F46E9"
         }
       };
       

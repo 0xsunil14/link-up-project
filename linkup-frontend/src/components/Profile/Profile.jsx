@@ -139,84 +139,93 @@ export default function Profile() {
         </div>
 
         {/* Posts Grid */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Posts</h2>
-          {posts.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
-              <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        {/* Posts Grid */}
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Posts</h2>
+        {posts.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+            <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
+            <p className="text-gray-600 mb-6">Share your first moment with the world!</p>
+            <button
+              onClick={() => navigate('/post/create')}
+              className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts yet</h3>
-              <p className="text-gray-600 mb-6">Share your first moment with the world!</p>
-              <button
-                onClick={() => navigate('/post/create')}
-                className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                Create Post
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map(post => (
-                <div key={post.id} className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
-                  {post.imageUrl && (
-                    <div className="aspect-square overflow-hidden">
-                      <img src={post.imageUrl} alt="Post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              Create Post
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posts.map(post => (
+              <div key={post.id} className="group relative bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all">
+                {post.imageUrl && (
+                  <div
+                    className="aspect-square overflow-hidden cursor-pointer"
+                    onClick={() => navigate(`/post/${post.id}`)}
+                  >
+                    <img src={post.imageUrl} alt="Post" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  </div>
+                )}
+                <div className="p-4">
+                  <p
+                    className="text-gray-800 line-clamp-2 mb-3 cursor-pointer hover:text-gray-900"
+                    onClick={() => navigate(`/post/${post.id}`)}
+                  >
+                    {post.caption}
+                  </p>
+                  <div className="flex items-center justify-between text-sm">
+                    <div className="flex items-center space-x-4 text-gray-600">
+                      <span className="flex items-center">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        </svg>
+                        {post.likesCount}
+                      </span>
+                      <span className="flex items-center">
+                        <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                        </svg>
+                        {post.commentsCount}
+                      </span>
                     </div>
-                  )}
-                  <div className="p-4">
-                    <p className="text-gray-800 line-clamp-2 mb-3">{post.caption}</p>
-                    <div className="flex items-center justify-between text-sm text-gray-600">
-                      <div className="flex items-center space-x-4">
-                        <span className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                          </svg>
-                          {post.likesCount}
-                        </span>
-                        <span className="flex items-center">
-                          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                          </svg>
-                          {post.commentsCount}
-                        </span>
-                      </div>
-                      <div className="flex space-x-2">
-                        <button
-                          onClick={() => navigate(`/post/edit/${post.id}`)}
-                          className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
-                        >
-                          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => handleDeletePost(post.id)}
-                          className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <svg className="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
-                      </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => navigate(`/post/edit/${post.id}`)}
+                        className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => handleDeletePost(post.id)}
+                        className="p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <svg className="w-5 h-5 text-gray-600 hover:text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <DeleteModal
-          isOpen={deleteModal.isOpen}
-          onClose={() => setDeleteModal({ isOpen: false, postId: null })}
-          onConfirm={confirmDelete}
-          title="Delete Post?"
-          message="Are you sure you want to delete this post? This action cannot be undone."
-        />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    
+
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, postId: null })}
+        onConfirm={confirmDelete}
+        title="Delete Post?"
+        message="Are you sure you want to delete this post? This action cannot be undone."
+      />
+    </div>
+
   );
 }

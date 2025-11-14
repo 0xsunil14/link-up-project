@@ -53,6 +53,8 @@ export const userAPI = {
   unfollowUser: (userId) => axiosInstance.delete(`/users/${userId}/follow`),
   getFollowers: () => axiosInstance.get('/users/followers'),
   getFollowing: () => axiosInstance.get('/users/following'),
+  getUserFollowers: (userId) => axiosInstance.get(`/users/${userId}/followers`),
+  getUserFollowing: (userId) => axiosInstance.get(`/users/${userId}/following`),
 };
 
 export const postAPI = {
